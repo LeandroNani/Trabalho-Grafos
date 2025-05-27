@@ -7,7 +7,7 @@ token = "seu_token"
 auth = (usuario, token)
 
 REPO_COUNT = 50
-CONTRIBUTOR_LIMIT = 500
+CONTRIBUTOR_LIMIT = 100
 OUTPUT_FILE = "github_repos_contributors.json"
 
 def fetch_top_repositories(count=50):
