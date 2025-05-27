@@ -1,0 +1,33 @@
+📄 Resumo do Projeto
+🔹 Coleta de Dados
+Um script em Python acessa a API pública do GitHub com autenticação via token. O algoritmo busca os 50 repositórios mais populares (com base em estrelas) e coleta até 500 contribuidores para cada repositório, ordenados por número de contribuições.
+
+Os dados são armazenados em um arquivo JSON (github_repos_contributors.json), estruturado como um mapeamento de repositórios para seus respectivos contribuidores.
+
+🔹 Construção do Grafo Bipartido
+A partir dos dados coletados, é construído um grafo bipartido contendo dois tipos de nós:
+
+- Usuários (contribuidores) / Repositórios
+
+As arestas representam a relação de contribuição entre usuários e repositórios.
+
+🔹 Projeção do Grafo de Usuários
+Com base no grafo bipartido, é gerado um grafo projetado apenas com usuários. Nesse grafo:
+
+Cada nó representa um usuário
+
+Há uma aresta entre dois usuários se eles contribuíram para ao menos um repositório em comum
+
+O peso da aresta corresponde ao número de repositórios compartilhados
+
+Esse grafo é utilizado para análises de grau, centralidade, agrupamento e comunidades.
+
+🔹 Exportação (Dúvida nessa parte porque o professor disse que não podemos usar bibliotecas)
+Os grafos são exportados nos formatos .gexf:
+
+grafo_bipartido.gexf
+
+grafo_usuarios.gexf
+
+Esses arquivos podem ser abertos no Gephi para visualização e análise de métricas de redes sociais.
+
