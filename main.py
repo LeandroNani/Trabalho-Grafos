@@ -2,8 +2,8 @@ import requests
 import json
 import time
 
-usuario = "LeandroNani"
-token = "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"
+usuario = "seu_usuario"
+token = "seu_token"
 auth = (usuario, token)
 
 REPO_COUNT = 50
