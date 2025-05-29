@@ -10,6 +10,20 @@ Os dados são armazenados em um arquivo JSON: github_repos_contributors.json
 
 Esse arquivo contém um mapeamento de repositórios para seus respectivos contribuidores.
 
+### 🧹 Filtragem de Dados
+
+Durante as primeiras execuções do projeto, foi identificado um problema: o grafo gerado tinha um **nó central artificial**, representado por `dependabot[bot]`. Esse bot do GitHub contribui automaticamente em centenas de repositórios, o que fazia com que ele se conectasse a quase todos os outros nós da rede.
+
+Além disso, percebemos que muitas conexões entre usuários tinham peso **muito baixo** (no máximo 3), indicando que poucos usuários colaboravam juntos em múltiplos repositórios.
+
+Para resolver esses problemas, aplicamos a seguinte filtragem na etapa de mineração:
+
+- **Bots** (como `dependabot[bot]`) foram ignorados, removendo contribuições automatizadas da rede
+- Apenas usuários com **5 ou mais contribuições** foram considerados, garantindo relevância nas interações
+- A busca por repositórios passou a considerar apenas projetos **populares e ativos**, com **mais de 10.000 estrelas** e **tamanho superior a 1000 linhas de código**
+
+Essas mudanças aumentaram a qualidade do grafo, reduziram ruídos e tornaram as métricas de centralidade, agrupamento e comunidades mais confiáveis no Gephi.
+
 ---
 
 ### 🔹 Construção do Grafo Bipartido
