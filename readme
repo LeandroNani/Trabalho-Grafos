@@ -4,7 +4,7 @@
 
 ### 🔹 Coleta de Dados
 
-Um script em Python acessa a API pública do GitHub com autenticação via token. O algoritmo busca os **50 repositórios mais populares** (com base em estrelas) e coleta até **500 contribuidores** para cada repositório, ordenados por número de contribuições.
+Um script em Python acessa a API pública do GitHub com autenticação via token. O algoritmo busca os **50 repositórios mais populares** (com base em estrelas) e coleta até **100 contribuidores** para cada repositório, ordenados por número de contribuições.
 
 Os dados são armazenados em um arquivo JSON: github_repos_contributors.json
 
