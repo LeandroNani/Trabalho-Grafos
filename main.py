@@ -3,8 +3,8 @@ import json
 import time
 
 # === Autenticação na API do GitHub ===
-usuario = "seu_user"
-token = "seu_token"
+usuario = os.getenv("GITHUB_USERNAME")
+token = os.getenv("GITHUB_TOKEN")
 auth = (usuario, token)
 
 # === Parâmetros da coleta ===

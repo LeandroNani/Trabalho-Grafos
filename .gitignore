@@ -1,4 +1,18 @@
+# Variáveis de ambiente
+.env
+.env.local
+.env.production
+
+__pycache__/
+*.pyc
+*.pyo
+*.log
+.DS_Store
+
 # Ignorar o JSON com os dados coletados
 github_repos_contributors.json
 grafo_bipartido.gexf
 grafo_usuarios.gexf
+centralidades_usuarios.csv
+centralidades_usuarios.json
+centralidade_CSV.py
