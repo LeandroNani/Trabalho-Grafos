@@ -90,3 +90,19 @@ Com isso, o ForceAtlas 2 permite:
 - API REST do GitHub
 - Gephi 0.10+ (para visualização)
 - `networkx` (opcional, apenas na versão com biblioteca)
+
+---
+
+## ✏️ Alunos
+- André Teichii Santos Hyodo
+- Davi Érico dos Santos
+- Gabriel El Dine Breguez da Cunha
+- Giovanna Ferreira dos Santos de Almeida
+- Leandro Caldas Pacheco
+- Lucas Maia Rocha
+- Miguel Amaral Lessa Xavier
+  
+---
+
+## 🎯 Professor
+- Leonardo Vilela Cardoso
