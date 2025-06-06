@@ -18,6 +18,12 @@ REPO_COUNT = 50              # número de repositórios a coletar
 CONTRIBUTOR_LIMIT = 100      # número máximo de contribuidores por repositório
 OUTPUT_FILE = "github_repos_contributors.json"
 
+if os.path.exists(OUTPUT_FILE):
+    print(f"Arquivo '{OUTPUT_FILE}' já existe. Pulando coleta de dados.")
+    print("Para executar novamente, renomeie ou remova o arquivo existente.")
+    print("⚠️  não é necessário executar novamente a coleta, a menos que queira atualizar os dados.")
+    exit(0)
+
 # === Função para buscar os repositórios mais populares ===
 def fetch_top_repositories(count=50):
     repos = []
