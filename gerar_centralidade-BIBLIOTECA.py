@@ -3,7 +3,7 @@ import networkx as nx
 
 INPUT_FILE = "github_repos_contributors.json"
 OUTPUT_BIPARTIDO = "grafo_bipartido.gexf"
-OUTPUT_USUARIOS = "grafo_usuarios.gexf"
+OUTPUT_USUARIOS = "grafo_usuarios_centralidade-BIBLIOTECA.gexf"
 OUTPUT_CENTRALIDADES = "centralidades_usuarios.json"
 
 # Carrega JSON
@@ -21,23 +21,31 @@ for repo, users in data.items():
 # Separa usuários
 usuarios = {n for n, d in B.nodes(data=True) if d["type"] == "user"}
 
-# Projeta grafo de usuários
+# Projeta grafo de usuários (grafo unipartido com pesos)
 G = nx.bipartite.weighted_projected_graph(B, usuarios)
 
-# Salva arquivos para abrir no Gephi
-nx.write_gexf(B, OUTPUT_BIPARTIDO)
-nx.write_gexf(G, OUTPUT_USUARIOS)
-
-# Calcula centralidade
+# Calcula centralidades
 centralidades = {
     "grau": dict(G.degree()),
     "grau_normalizado": nx.degree_centrality(G),
     "intermediacao": nx.betweenness_centrality(G, weight='weight'),
     "proximidade": nx.closeness_centrality(G),
-     "agrupamento": nx.clustering(G, weight='weight'),
+    "agrupamento": nx.clustering(G, weight='weight'),
 }
 
-# Salva centralidade em JSON
+# Adiciona centralidades como atributos dos nós
+for node in G.nodes():
+    G.nodes[node]["grau"] = centralidades["grau"][node]
+    G.nodes[node]["grau_normalizado"] = centralidades["grau_normalizado"][node]
+    G.nodes[node]["intermediacao"] = centralidades["intermediacao"][node]
+    G.nodes[node]["proximidade"] = centralidades["proximidade"][node]
+    G.nodes[node]["agrupamento"] = centralidades["agrupamento"][node]
+
+# Salva grafos
+nx.write_gexf(B, OUTPUT_BIPARTIDO)
+nx.write_gexf(G, OUTPUT_USUARIOS)
+
+# Salva centralidades em JSON 
 with open(OUTPUT_CENTRALIDADES, "w", encoding="utf-8") as f:
     json.dump(centralidades, f, indent=2)
 
