@@ -2,6 +2,12 @@ import requests
 import json
 import time
 
+import os
+from dotenv import load_dotenv
+
+# Carrega as variáveis do arquivo .env
+load_dotenv()
+
 # === Autenticação na API do GitHub ===
 usuario = os.getenv("GITHUB_USERNAME")
 token = os.getenv("GITHUB_TOKEN")

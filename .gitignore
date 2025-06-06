@@ -10,7 +10,6 @@ __pycache__/
 .DS_Store
 
 # Ignorar o JSON com os dados coletados
-github_repos_contributors.json
 grafo_bipartido.gexf
 grafo_usuarios.gexf
 centralidades_usuarios.csv
