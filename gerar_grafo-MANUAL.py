@@ -1,23 +1,21 @@
 import json
+import time  # Importa o módulo para medir tempo
+import os
+import psutil
+
+# Marca o tempo de início
+start_time = time.time()
 
 # Caminhos dos arquivos de entrada e saída
 INPUT_FILE = "github_repos_contributors.json"           # Arquivo JSON com o mapeamento: repositório → usuários
-OUTPUT_GEXF_USUARIOS = "grafo_usuarios.gexf"             # Saída do grafo projetado apenas com usuários
-OUTPUT_GEXF_BIPARTIDO = "grafo_bipartido.gexf"           # Saída do grafo bipartido (usuário ↔ repositório)
+OUTPUT_GEXF_USUARIOS = "grafo_usuarios-MANUAL.gexf"             # Saída do grafo projetado apenas com usuários
+OUTPUT_GEXF_BIPARTIDO = "grafo_bipartido-MANUAL.gexf"           # Saída do grafo bipartido (usuário ↔ repositório)
 
 # === 1. Carrega os dados do JSON ===
-# Estrutura esperada:
-# {
-#   "owner1/repo1": ["userA", "userB", ...],
-#   "owner2/repo2": ["userA", "userC", ...],
-# }
 with open(INPUT_FILE, "r", encoding="utf-8") as f:
     data = json.load(f)
 
 # === 2. Constrói o grafo bipartido ===
-# - Um conjunto de repositórios (repos)
-# - Um conjunto de usuários (usuarios)
-# - Um dicionário 'bipartido' onde cada chave é um repo e o valor é o conjunto de usuários que contribuíram nele
 repos = set(data.keys())
 usuarios = set()
 bipartido = {}
@@ -29,8 +27,6 @@ for repo, devs in data.items():
         usuarios.add(user)
 
 # === 3. Projeta o grafo apenas com usuários ===
-# - Dois usuários são conectados se contribuíram para o mesmo repositório
-# - O peso da aresta representa quantos repositórios os dois têm em comum
 grafo_usuarios = {}
 
 for repo, devs in bipartido.items():
@@ -46,25 +42,20 @@ for repo, devs in bipartido.items():
             grafo_usuarios[v][u] = grafo_usuarios[v].get(u, 0) + 1
 
 # === 4. Exporta o grafo bipartido em formato GEXF ===
-# - Nós de tipo "repo" e "user"
-# - Arestas conectando usuário → repositório com peso 1
 with open(OUTPUT_GEXF_BIPARTIDO, "w", encoding="utf-8") as f:
     f.write("""<?xml version="1.0" encoding="UTF-8"?>
 <gexf version="1.2" xmlns="http://www.gexf.net/1.2draft">
   <graph mode="static" defaultedgetype="undirected">
     <nodes>
 """)
-    # Adiciona os repositórios como nós do tipo "repo"
     for repo in repos:
         f.write(f'      <node id="{repo}" label="{repo}" type="repo" />\n')
-    # Adiciona os usuários como nós do tipo "user"
     for user in usuarios:
         f.write(f'      <node id="{user}" label="{user}" type="user" />\n')
 
     f.write("""    </nodes>
     <edges>\n""")
 
-    # Cria arestas entre usuários e repositórios com peso fixo 1
     edge_id = 0
     for repo, devs in bipartido.items():
         for user in devs:
@@ -76,27 +67,23 @@ with open(OUTPUT_GEXF_BIPARTIDO, "w", encoding="utf-8") as f:
 </gexf>
 """)
 
-print(f"Grafo bipartido salvo em: {OUTPUT_GEXF_BIPARTIDO}")
+print(f"✅ Grafo bipartido salvo em: {OUTPUT_GEXF_BIPARTIDO}")
 
 # === 5. Exporta o grafo de usuários em formato GEXF ===
-# - Apenas nós do tipo usuário
-# - Arestas entre usuários com pesos baseados na quantidade de repositórios compartilhados
 with open(OUTPUT_GEXF_USUARIOS, "w", encoding="utf-8") as f:
     f.write("""<?xml version="1.0" encoding="UTF-8"?>
 <gexf version="1.2" xmlns="http://www.gexf.net/1.2draft">
   <graph mode="static" defaultedgetype="undirected">
     <nodes>
 """)
-    # Adiciona todos os usuários como nós
     for user in usuarios:
         f.write(f'      <node id="{user}" label="{user}" />\n')
 
     f.write("""    </nodes>
     <edges>\n""")
 
-    # Cria arestas ponderadas entre usuários
     edge_id = 0
-    added = set()  # evita duplicação em grafos não direcionados
+    added = set()
     for u in grafo_usuarios:
         for v, peso in grafo_usuarios[u].items():
             if (v, u) in added:
@@ -110,4 +97,25 @@ with open(OUTPUT_GEXF_USUARIOS, "w", encoding="utf-8") as f:
 </gexf>
 """)
 
-print(f"Grafo de usuários salvo em: {OUTPUT_GEXF_USUARIOS}")
+print(f"✅ Grafo de usuários salvo em: {OUTPUT_GEXF_USUARIOS}")
+
+# Marca o tempo final e calcula o tempo decorrido
+end_time = time.time()
+elapsed = end_time - start_time
+
+# Medições adicionais
+file_size_kb = os.path.getsize(INPUT_FILE) / 1024
+num_usuarios = len(usuarios)
+num_repos = len(repos)
+num_nos_grafo_usuarios = len(grafo_usuarios)
+num_arestas_grafo_usuarios = len(added)
+process = psutil.Process(os.getpid())
+mem_used = process.memory_info().rss / (1024 * 1024)
+
+print(f"⏱️ Tempo total de execução grafo gerado manualmente: {elapsed:.2f} segundos")
+print(f"📦 Tamanho do arquivo de entrada: {file_size_kb:.2f} KB")
+print(f"👤 Número de usuários: {num_usuarios}")
+print(f"📁 Número de repositórios: {num_repos}")
+print(f"📊 Nós no grafo de usuários: {num_nos_grafo_usuarios}")
+print(f"🔗 Arestas no grafo de usuários: {num_arestas_grafo_usuarios}")
+print(f"🧠 Memória RAM usada durante execução: {mem_used:.2f} MB")
