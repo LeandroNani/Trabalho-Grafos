@@ -2,6 +2,9 @@ import json
 import time  # Importa o módulo para medir tempo
 import os
 import psutil
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
 
 # Marca o tempo de início
 start_time = time.time()
