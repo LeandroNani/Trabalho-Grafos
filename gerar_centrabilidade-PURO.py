@@ -4,6 +4,9 @@ import os
 import psutil
 from collections import defaultdict, deque
 from itertools import combinations
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
 
 # === Timer começa ===
 start_time = time.time()

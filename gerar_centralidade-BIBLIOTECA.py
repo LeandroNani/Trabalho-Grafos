@@ -3,6 +3,9 @@ import networkx as nx
 import time
 import os
 import psutil  # Biblioteca para medições do sistema
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
 
 start_time = time.time()
 process = psutil.Process(os.getpid())
