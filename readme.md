@@ -8,6 +8,8 @@ Os dados são armazenados em um arquivo JSON: github_repos_contributors.json.
 
 Esse arquivo contém um mapeamento de repositórios para seus respectivos contribuidores.
 
+Note: Criamos um script que gera esses dados artificiais apenas para fins de análise e comparação dos algoritmos.
+
 ### 🧹 Filtragem de Dados
 Durante as primeiras execuções do projeto, foi identificado um problema: o grafo gerado tinha um **nó central artificial**, representado por `dependabot[bot]`. Esse bot do GitHub contribui automaticamente em centenas de repositórios, o que fazia com que ele se conectasse a quase todos os outros nós da rede.
 
