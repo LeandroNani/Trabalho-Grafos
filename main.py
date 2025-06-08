@@ -50,7 +50,7 @@ def fetch_top_repositories(count=50):
     return repos
 
 # === Função para buscar os contribuidores de cada repositório ===
-def fetch_contributors(owner, repo, limit=500):
+def fetch_contributors(owner, repo, limit=CONTRIBUTOR_LIMIT):
     contributors = []
     page = 1
     while len(contributors) < limit:
